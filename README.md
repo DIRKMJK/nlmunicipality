@@ -36,6 +36,16 @@ guesser = GuessMunicipality('../data/config', recode_gem=recode_gem)
 guesser.guess('HAGA')
 ```
 
+If you know that the location is within a specific province, you can specify this, which may prevent false matches. You could opt to combine this with setting a lower threshold for the quality of matches.
+
+```python
+from nlmunicipality.guess import GuessMunicipality
+
+guesser = GuessMunicipality('../data/config', threshold=80)
+guesser.guess('Valkenburg', province='Zuid-Holland')
+```
+
+
 # Installation
 
 See discussion [here][stack].

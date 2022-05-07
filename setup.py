@@ -6,7 +6,7 @@ README = (HERE / "README.md").read_text()
 
 
 setup(name='nlmunicipality',
-    version='0.0.0',
+    version='0.0.1',
     description='Guess official municipality name from user-provided location name',
     long_description=README,
     long_description_content_type="text/markdown",

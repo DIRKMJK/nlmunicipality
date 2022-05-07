@@ -126,15 +126,27 @@ class GuessMunicipality():
                 cbs[c] = cbs[c].str.strip()
             if dir_config:
                 cbs.to_csv(path_cbs, index=False)
-
-        wp = {
+        wp = {}
+        wp['any'] = {
             wp.lower():gm
             for wp, gm in zip(cbs.Woonplaatsen, cbs.Naam_2)
             if list(cbs.Woonplaatsen).count(wp) == 1
         }
-        gm = {gm.lower():gm for gm in set(cbs.Naam_2)}
+        gm = {}
+        gm['any'] = {gm.lower():gm for gm in set(cbs.Naam_2)}
         for k, v in self.recode_gem.items():
-            gm[k] = v
+            gm['any'][k] = v
+        for province in set(cbs.Naam_4):
+            subset = cbs[cbs.Naam_4 == province]
+            key = province.lower()
+            gm[key] = {gm.lower():gm for gm in set(subset.Naam_2)}
+            for k, v in self.recode_gem.items():
+                gm[key][k] = v
+            wp[key] = {
+                wp.lower():gm
+                for wp, gm in zip(subset.Woonplaatsen, subset.Naam_2)
+                if list(subset.Woonplaatsen).count(wp) == 1
+            }
         remove = list(set(cbs.Naam_4.str.lower())) + self.remove
         remove = [s for s in remove if s not in ['utrecht', 'groningen']]
         return wp, gm, self.replace, remove
@@ -150,10 +162,17 @@ class GuessMunicipality():
 
     def guess(
             self, location, check_wp=True, check_gm_fuzzy=True,
-            check_wp_fuzzy=True):
+            check_wp_fuzzy=True, province=None):
         """Guess corresponding municipality name"""
         if not isinstance(location, str):
-            return
+            return None
+        if province:
+            if province.lower().strip() == 'friesland':
+                key = 'fryslân'
+            else:
+                key = province.lower().strip()
+        else:
+            key = 'any'
         location = location.lower().strip()
         if location.startswith('bergen '):
             for string in ['n.h.', '(nh', ' nh', 'noord-holland']:
@@ -175,21 +194,22 @@ class GuessMunicipality():
         substrings = [self.clean_substring(sub) for sub in location.split(',')
                       if len(sub) > 1]
         for substring in substrings:
-            if substring in self.gm:
-                return self.gm[substring]
+            if substring in self.gm[key]:
+                return self.gm[key][substring]
         if check_wp:
             for substring in substrings:
-                if substring in self.wp:
-                    return self.wp[substring]
+                if substring in self.wp[key]:
+                    return self.wp[key][substring]
         if check_gm_fuzzy:
             for substring in substrings:
-                match, score = process.extractOne(substring, self.gm.keys(),
+                match, score = process.extractOne(substring, self.gm[key].keys(),
                                                   scorer=fuzz.token_sort_ratio)
                 if score >= self.threshold:
-                    return self.gm[match]
-        if check_wp_fuzzy:
+                    return self.gm[key][match]
+        if check_wp and check_wp_fuzzy:
             for substring in substrings:
-                match, score = process.extractOne(substring, self.wp.keys(),
+                match, score = process.extractOne(substring, self.wp[key].keys(),
                                                   scorer=fuzz.token_sort_ratio)
                 if score >= self. threshold:
-                    return self.wp[match]
+                    return self.wp[key][match]
+        return None

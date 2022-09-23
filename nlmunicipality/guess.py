@@ -10,7 +10,7 @@ from fuzzywuzzy import process
 from bs4 import BeautifulSoup as bs
 
 
-CBS_TABLE = '84734NED'
+CBS_TABLE = '85210NED'
 
 REMOVE = [
     'the netherlands', 'nederland', 'netherlands', 'holland', 'gemeente', ' nl',
@@ -110,7 +110,7 @@ class GuessMunicipality():
             path_cbs = dir_config / 'cbs.csv'
         try:
             area_codes = pd.read_csv(path_area_codes, dtype='object')
-        except FileNotFoundError:
+        except (FileNotFoundError, UnboundLocalError):
             area_codes = self.get_area_codes()
             if dir_config:
                 area_codes.to_csv(path_area_codes, index=False)
@@ -118,7 +118,7 @@ class GuessMunicipality():
             self.replace[code] = place
         try:
             cbs = pd.read_csv(path_cbs)
-        except FileNotFoundError:
+        except (FileNotFoundError, UnboundLocalError):
             cbs = pd.DataFrame(cbsodata.get_data(self.cbs_table))
             for c in cbs.columns:
                 if cbs[c].dtype == 'int64':

@@ -119,7 +119,7 @@ nlmunicipality may return incorrect matches or fail to return correct matches.
 
 # Installation
 
-See discussion [here][stack].
+`pip install nlmunicipality`
 
 # Todo
 

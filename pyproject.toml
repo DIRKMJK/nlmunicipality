@@ -1,0 +1,21 @@
+[build-system]
+requires      = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nlmunicipality"
+version = "1.0.0"
+description = "Guess official Dutch municipality name from user-provided location name"
+readme = "README.md"
+authors = [{ name = "dirkmjk", email = "info@dirkmjk.nl" }]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["municipality"]
+dependencies = ['pandas', 'requests', 'cbsodata', 'fuzzywuzzy', 'bs4']
+requires-python = ">=3.9"
+
+[project.urls]
+Homepage = "https://github.com/DIRKMJK/nlmunicipality"

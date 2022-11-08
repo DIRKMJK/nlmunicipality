@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nlmunicipality"
-version = "1.0.1"
+version = "1.0.2"
 description = "Guess official Dutch municipality name from user-provided location name"
 readme = "README.md"
 authors = [{ name = "dirkmjk", email = "info@dirkmjk.nl" }]

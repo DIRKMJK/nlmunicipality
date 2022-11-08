@@ -30,6 +30,8 @@ Guessing the municipality may involve the following steps:
 
 You can use the parameters for the `guess` method to control which steps will be included. For example, by setting `check_fuzzy=False`, you’ll exclude all steps involving looking for a fuzzy match.
 
+# Creating a guesser
+
 ## Match year
 
 When creating a `GuessMunicipality` object, you can set the `match_year` parameter, which is the year for which a match will be tried to find. For example, with match_year set to 2020, Appingedam will be considered a municipality. If you set it to 2021 or higher, it will be considered a part of Eemsdelta.
@@ -50,6 +52,8 @@ guesser.guess('HAGA')
 ## Storing metadata
 
 The package uses data from Statitics Netherlands (CBS) and from Wikipedia, which will be downloaded when you first create a `GuessMunicipality` object for a specific match year. If you set the `path_config` parameter when creating the guesser, this data will be stored so that it won’t be necessary to re-download each time you create a new guesser.
+
+# Using the guess method
 
 ## Fuzzy matches
 
@@ -114,8 +118,7 @@ You can set the `return_how` parameter to get a hint as to how a match was found
 
 # Caveats
 
-nlmunicipality may return incorrect matches or fail to return correct matches.
-
+nlmunicipality may return incorrect matches or fail to return correct matches. If you run into something that doesn’t work properly, please let me know and I see if I can fix it. Note that there will always be ambiguities such as former municipalities that have been split, or multiple places with the same name.
 
 # Installation
 
